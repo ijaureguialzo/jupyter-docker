@@ -1,2 +1,5 @@
+# https://jupyter-docker-stacks.readthedocs.io/en/latest/using/selecting.html#core-stacks
 JUPYTER_IMAGE=scipy-notebook
+
+# https://jupyter-docker-stacks.readthedocs.io/en/latest/using/common.html#alternative-commands
 JUPYTER_FRONTEND=notebook
