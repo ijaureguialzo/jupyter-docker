@@ -11,6 +11,7 @@ help: _header
 	${info }
 	@echo Opciones:
 	@echo --------------------------
+	@echo build
 	@echo start / stop / restart
 	@echo token
 	@echo workspace / workspace-root
@@ -29,6 +30,9 @@ _header:
 	@echo ----
 	@echo Jupyter en Docker
 	@echo ----
+
+build:
+	@docker compose build --pull
 
 _start-command:
 	@docker compose up -d --remove-orphans

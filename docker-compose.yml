@@ -20,7 +20,11 @@ services:
       - jupyter
 
   jupyter:
-    image: quay.io/jupyter/${JUPYTER_IMAGE}:${JUPYTER_IMAGE_VERSION:-latest}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        - JUPYTER_IMAGE=quay.io/jupyter/${JUPYTER_IMAGE}:${JUPYTER_IMAGE_VERSION:-latest}
     hostname: jupyter-docker
     environment:
       - DOCKER_STACKS_JUPYTER_CMD=${JUPYTER_FRONTEND}
