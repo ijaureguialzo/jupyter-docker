@@ -27,9 +27,9 @@ _urls: _header
 	@echo -------------------------------------------------
 
 _header:
-	@echo ----
+	@echo -----------------
 	@echo Jupyter en Docker
-	@echo ----
+	@echo -----------------
 
 build:
 	@docker compose build --pull
