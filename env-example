@@ -1,0 +1,2 @@
+JUPYTER_IMAGE=scipy-notebook
+JUPYTER_FRONTEND=notebook

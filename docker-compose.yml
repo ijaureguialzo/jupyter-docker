@@ -1,0 +1,38 @@
+services:
+
+  traefik:
+    image: traefik:${TRAEFIK_VERSION:-3}
+    ports:
+      - "80:80"
+      - "443:443"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-dashboard.rule=Host(`${FQDN_TRAEFIK:-traefik.jupyter.test}`) && (PathPrefix(`/api`) || PathPrefix(`/dashboard`))"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-dashboard.service=api@internal"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-dashboard.entrypoints=websecure"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-dashboard.tls=true"
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+      - ./traefik.yml:/etc/traefik/traefik.yml:ro
+    depends_on:
+      - jupyter
+
+  jupyter:
+    image: quay.io/jupyter/${JUPYTER_IMAGE}:${JUPYTER_IMAGE_VERSION:-latest}
+    hostname: jupyter-docker
+    environment:
+      - DOCKER_STACKS_JUPYTER_CMD=${JUPYTER_FRONTEND}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-jupyter.rule=Host(`${FQDN_JUPYTER:-jupyter.test}`)"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-jupyter.entrypoints=websecure"
+      - "traefik.http.routers.${COMPOSE_PROJECT_NAME}-jupyter.tls=true"
+      - "traefik.http.services.${COMPOSE_PROJECT_NAME}-jupyter.loadbalancer.server.port=8888"
+    volumes:
+      - user_data:/home/jovyan
+      - ./proyectos:/home/jovyan/proyectos
+
+volumes:
+  user_data:
